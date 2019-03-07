@@ -1,0 +1,115 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1"/>
+    <title>写博客</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit"/>
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <link rel="icon" type="image/png" href="/assets/i/favicon.png"/>
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <link rel="icon" sizes="192x192" href="/assets/i/app-icon72x72@2x.png"/>
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+    <link rel="apple-touch-icon-precomposed" href="/assets/i/app-icon72x72@2x.png"/>
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="/assets/i/app-icon72x72@2x.png"/>
+    <meta name="msapplication-TileColor" content="#0e90d2"/>
+
+    <link rel="stylesheet" href="/assets/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/assets/css/app.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-editor/latest/tui-editor.css"></link>
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-editor/latest/tui-editor-contents.css"></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.2/codemirror.css"></link>
+    <script src="https://uicdn.toast.com/tui-editor/latest/tui-editor-Editor-full.js"></script>
+</head>
+<style type="text/css">
+    html,body{
+        height:100%;
+        padding: 15px;
+    }
+</style>
+<body style="height: 100%">
+<div class="" style="padding-top: 20px;">
+    <form method="post" class="am-form">
+        <input type="text" class="am-radius" placeholder="请填写博客标题" name="title" id="title" value=""  maxlength="50"/>
+        <br/>
+        <input type="text" class="am-radius" placeholder="请填写博客摘要" name="digest" id="digest" value=""  maxlength="300"/>
+        <br/>
+        <!--  <div class="am-cf">
+            <button class="am-btn am-btn-success am-fl">向左浮动</button>
+            <button class="am-btn am-btn-success am-fr">向右浮动</button>
+          </div>-->
+        <div class="am-cf">
+            <input type="button" name=""  value="保 存" class="am-btn am-btn-primary am-radius am-fr" onclick="submitBlog()"/>
+        </div>
+    </form>
+</div>
+
+<div  class=" am-nbfc am-cf"></div>
+<!--
+<input type="hidden" name="id" id="blogId">
+<div class="am-g">
+  &lt;!&ndash;<span class="am-input-group-label"><i class="am-icon-lock am-icon-fw"></i></span>&ndash;&gt;
+  <input type="text" class="am-u-sm-12 am-u-md-10 am-u-lg-10" placeholder="请填写博客标题"  id="title" name="title"  th:value="${title}"  maxlength="50">
+</div>
+<textarea class="blog-textarea" placeholder="请填写博客摘要"  id="summary" name="summary"  th:text="${summary}" maxlength="300"></textarea>
+-->
+
+<div id="editSection" ></div>
+
+
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="/assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="/assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="/assets/js/amazeui.min.js"></script>
+<script type="text/javascript">
+    // 详细文档参考github： https://github.com/nhnent/tui.editor/tree/master/docs
+    var editor = new tui.Editor({
+        el: document.querySelector('#editSection'),
+        initialEditType: 'markdown',
+        previewStyle: 'vertical',
+        height: '100%'
+    });
+    
+    function submitBlog() {
+        var title =$("#title").val();
+        var digest = $("#digest").val();
+        var content = $('div.te-preview div.tui-editor-contents')[0];
+        var  content2 = $(content).text();
+       // console.log($(content).text())//获取元素内容 不带html标签
+        //console.log($(content).html())//获取元素内容 带html标签
+        console.log("----"+content2)
+        $.ajax({
+            type: "POST",
+            url: "/blog/save",
+            data: "title="+title+"&digest="+digest+"&content="+content2,
+            success: function(msg){
+                alert( msg.data);
+            }
+        });
+    }
+</script>
+</body>
+</html>
